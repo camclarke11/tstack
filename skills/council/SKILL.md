@@ -10,16 +10,22 @@ relevant checks. Give council the updated implementation; do not defer known
 fixes until reviews return. If the user wants to discard the implementation
 and explore new ideas, skip fixes to code being replaced.
 
-Bring in three delegates to help with the user's request, usually for review
-or feedback. Use one strong model from each of three different providers, at
-high reasoning effort. If the user's instructions name council members, use
-those. Otherwise pick the latest flagship model from each provider, for
-example Claude Opus, GPT Sol, and Gemini Pro.
+Bring in two delegates to help with the user's request, usually for review
+or feedback. The council has exactly these two members:
 
-In T3 Code, use `orchestrator_capabilities` to resolve the models, then
-`delegate_task` to start one delegate per model in parallel. Elsewhere, use
-the harness's subagent tools. If you cannot reach three providers, or a named
-member is unavailable, report it instead of substituting.
+| Delegate | Provider | Model | Reasoning effort |
+| --- | --- | --- | --- |
+| Claude Opus | Claude (`claudeAgent`) | `claude-opus-5-5` | `medium` (`effort`) |
+| GPT Sol | Codex (`codex`) | `gpt-6.1-sol` | `xhigh` (`reasoningEffort`) |
+
+Do not add, swap, or substitute members, and do not change their effort
+levels, unless the user names different council members for this request.
+
+In T3 Code, use `orchestrator_capabilities` to confirm both models, then
+`delegate_task` to start one delegate per model in parallel, passing the
+effort above in `target.options`. Elsewhere, use the harness's subagent
+tools. If a member or its effort level is unavailable, report it instead of
+substituting.
 
 Give each delegate the request and relevant context. For review or feedback,
 keep their work read-only. Collect their responses and summarize the useful
@@ -41,7 +47,6 @@ Rounds: 2
 | --- | --- | --- |
 | Claude Opus | 7/10 | 9/10 |
 | GPT Sol | 8/10 | 10/10 |
-| Gemini Pro | 7/10 | 9/10 |
 ```
 
 If a delegate gives no score, write `no score`. Do not invent one.
@@ -49,7 +54,7 @@ If the PR is open, edit the description. Do not post a comment for this.
 If there is no PR, put the same results in the final reply only.
 
 If you agree with their recommendations, make the changes and request a fresh
-review after. Continue this process until all delegates are satisfied with the
+review after. Continue this process until both delegates are satisfied with the
 outcome.
 
 Do not let repeated reviews result in scope creep. It is your job to fight to
